@@ -6,6 +6,8 @@ use crate::Pack;
 pub(crate) mod slot;
 mod stack;
 pub(crate) use self::slot::Slot;
+#[cfg(sgx)]
+use std::prelude::v1::*;
 use std::{fmt, marker::PhantomData};
 
 /// A page address encodes the location of a slot within a shard (the page

@@ -912,7 +912,12 @@ fn exponential_backoff(exp: &mut usize) {
     if *exp >= MAX_EXPONENT {
         // If we have reached the max backoff, also yield to the scheduler
         // explicitly.
+        #[cfg(not(sgx))]
         crate::sync::yield_now();
+        #[cfg(sgx)]
+        for _ in 0..(1 << MAX_EXPONENT) {
+            atomic::spin_loop_hint();
+        }
     } else {
         // Otherwise, increment the exponent.
         *exp += 1;

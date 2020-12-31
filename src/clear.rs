@@ -1,3 +1,5 @@
+#[cfg(sgx)]
+use std::prelude::v1::*;
 use std::{collections, hash, ops::DerefMut, sync};
 
 /// Trait implemented by types which can be cleared in place, retaining any
@@ -78,6 +80,7 @@ impl Clear for String {
     }
 }
 
+#[cfg(not(sgx))]
 impl<T: Clear> Clear for sync::Mutex<T> {
     #[inline]
     fn clear(&mut self) {
@@ -85,7 +88,24 @@ impl<T: Clear> Clear for sync::Mutex<T> {
     }
 }
 
+#[cfg(sgx)]
+impl<T: Clear> Clear for sync::SgxMutex<T> {
+    #[inline]
+    fn clear(&mut self) {
+        self.get_mut().unwrap().clear();
+    }
+}
+
+#[cfg(not(sgx))]
 impl<T: Clear> Clear for sync::RwLock<T> {
+    #[inline]
+    fn clear(&mut self) {
+        self.write().unwrap().clear();
+    }
+}
+
+#[cfg(sgx)]
+impl<T: Clear> Clear for sync::SgxRwLock<T> {
     #[inline]
     fn clear(&mut self) {
         self.write().unwrap().clear();

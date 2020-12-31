@@ -66,7 +66,11 @@ mod inner {
 mod inner {
     #![allow(dead_code)]
     pub(crate) use lazy_static::lazy_static;
+    #[cfg(not(sgx))]
     pub(crate) use std::sync::{atomic, Mutex};
+    #[cfg(sgx)]
+    pub(crate) use std::sync::{atomic, SgxMutex as Mutex};
+    #[cfg(not(sgx))]
     pub(crate) use std::thread::yield_now;
     pub(crate) use std::thread_local;
 

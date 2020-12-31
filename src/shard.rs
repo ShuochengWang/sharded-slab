@@ -13,6 +13,8 @@ use crate::{
     Pack,
 };
 
+#[cfg(sgx)]
+use std::prelude::v1::*;
 use std::{fmt, ptr, slice};
 
 // ┌─────────────┐      ┌────────┐

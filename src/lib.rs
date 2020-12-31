@@ -201,6 +201,7 @@
 //!
 #![doc(html_root_url = "https://docs.rs/sharded-slab/0.1.0")]
 #![warn(missing_debug_implementations, missing_docs, missing_doc_code_examples)]
+#![cfg_attr(sgx, no_std)]
 
 macro_rules! test_println {
     ($($arg:tt)*) => {
@@ -227,6 +228,13 @@ macro_rules! test_dbg {
         }
     };
 }
+
+#[cfg(sgx)]
+#[macro_use]
+extern crate sgx_tstd as std;
+
+#[cfg(sgx)]
+use std::prelude::v1::*;
 
 mod clear;
 pub mod implementation;
