@@ -232,6 +232,8 @@ macro_rules! test_dbg {
 #[cfg(sgx)]
 #[macro_use]
 extern crate sgx_tstd as std;
+#[cfg(sgx)]
+extern crate sgx_trts;
 
 #[cfg(sgx)]
 use std::prelude::v1::*;

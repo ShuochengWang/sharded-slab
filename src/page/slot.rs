@@ -1,3 +1,6 @@
+#[cfg(sgx)]
+pub use sgx_trts::libc;
+
 use super::FreeList;
 use crate::sync::{
     atomic::{self, AtomicUsize, Ordering},
@@ -915,9 +918,7 @@ fn exponential_backoff(exp: &mut usize) {
         #[cfg(not(sgx))]
         crate::sync::yield_now();
         #[cfg(sgx)]
-        for _ in 0..(1 << MAX_EXPONENT) {
-            atomic::spin_loop_hint();
-        }
+        unsafe { libc::ocall::sched_yield(); }
     } else {
         // Otherwise, increment the exponent.
         *exp += 1;
