@@ -230,6 +230,8 @@ macro_rules! test_dbg {
 }
 
 #[cfg(sgx)]
+extern crate sgx_types;
+#[cfg(sgx)]
 #[macro_use]
 extern crate sgx_tstd as std;
 #[cfg(sgx)]
